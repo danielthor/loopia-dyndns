@@ -51,7 +51,7 @@ api_code = response.body.downcase.to_sym
 case api_code
   when :good, :nochg
     log.error API_RESPONSES[api_code] % [hostname, ip]
-    exit 0
+    exit true
   when :badauth, :notfqdn, :nohost
     log.error API_RESPONSES[api_code]
     abort API_RESPONSES[api_code]
