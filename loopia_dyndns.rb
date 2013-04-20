@@ -5,12 +5,13 @@ require 'logging'
 require 'ostruct'
 
 API_RESPONSES = {
-     good: "DNS updated",
+     good: "DNS updated: %s -> %s",
     nochg: "No change to DNS",
   badauth: "Unable to authenticate",
   notfqdn: "Invalid hostname",
    nohost: "Hostname not found",
-    abuse: "API abuse"
+    abuse: "API abuse",
+  unknown: "Unknown API response: %s"
 }.freeze
 
 # Logging
@@ -46,21 +47,18 @@ request.query = { hostname: hostname, myip: ip }
 response = HTTPI.get(request)
 
 # Handle response
-api_code = response.body.downcase
+api_code = response.body.downcase.to_sym
 case api_code
-  when 'good'
-    log.info "Updated #{hostname} -> #{ip}"
-    exit 1
-  when 'nochg'
-    log.debug "No change"
-    exit 1
-  when 'badauth', 'notfqdn', 'nohost'
-    log.error API_RESPONSES[api_code.to_sym]
-    abort API_RESPONSES[api_code.to_sym]
-  when 'abuse'
-    log.warn "API abuse"
-    abort "API abuse"
+  when :good, :nochg
+    log.error API_RESPONSES[api_code] % [hostname, ip]
+    exit 0
+  when :badauth, :notfqdn, :nohost
+    log.error API_RESPONSES[api_code]
+    abort API_RESPONSES[api_code]
+  when :abuse
+    log.warn API_RESPONSES[api_code]
+    abort API_RESPONSES[api_code]
   else
-    log.error "Unknown API response: #{response.body}"
-    abort "Unknown API response: #{response.body}"
+    log.error API_RESPONSES[api_code] % response.body
+    abort API_RESPONSES[api_code] % response.body
 end
