@@ -1,20 +1,5 @@
 #!/usr/bin/ruby
 
-# hostname
-# myip
-# wildcard=NOCHG
-
-# twitter_config_file = File.join(File.dirname(__FILE__), 'twitter.yml')
-# if File.exists?(twitter_config_file)
-#   twitter_config = YAML::load(File.open(twitter_config_file))
-#   Twitter.configure do |config|
-#     config.consumer_key = twitter_config['twitter']['consumer_key']
-#     config.consumer_secret = twitter_config['twitter']['consumer_secret']
-#     config.oauth_token = twitter_config['twitter']['oauth_token']
-#     config.oauth_token_secret = twitter_config['twitter']['oauth_token_secret']
-#   end
-# end
-
 require 'httpi'
 require 'logging'
 require 'ostruct'
