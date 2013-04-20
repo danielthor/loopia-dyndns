@@ -24,7 +24,7 @@ config_file = File.join(File.dirname(__FILE__), 'loopia.yml')
 if File.exists?(config_file)
   log.debug "Loading configuration from #{config_file}"
   config = YAML::load(File.open(config_file))
-  config = OpenStruct.new config
+  config = OpenStruct.new(config)
 else
   log.error "Unable to open #{config_file}. Quiting."
   abort "Unable to open #{config_file}"
